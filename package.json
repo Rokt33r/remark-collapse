@@ -11,8 +11,10 @@
     "standard": "^9.0.2"
   },
   "scripts": {
-    "test": "jest",
-    "lint": "standard"
+    "test": "jest --coverage",
+    "test:api": "jest",
+    "lint": "standard",
+    "pretest": "npm run lint --silent"
   },
   "standard": {
     "env": [
@@ -25,5 +27,15 @@
   },
   "files": [
     "index.js"
-  ]
+  ],
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "branches": 100,
+        "functions": 100,
+        "lines": 100,
+        "statements": 100
+      }
+    }
+  }
 }
