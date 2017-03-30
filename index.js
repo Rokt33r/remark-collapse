@@ -1,8 +1,22 @@
 const heading = require('mdast-util-heading-range')
 const toString = require('mdast-util-to-string')
 
+function defaultSummarizer (str) {
+  return 'Open ' + str
+}
+
+function isFunction (fn) {
+  return typeof fn === 'function'
+}
+
 module.exports = function (opts) {
   if (opts == null || opts.test == null) throw new Error('options.test must be given')
+
+  const summarizer = opts.summary != null
+    ? opts.summary
+    : defaultSummarizer
+
+  if (!isFunction(summarizer)) throw new Error('options.summary must be function')
 
   return function (node) {
     heading(node, opts.test, function (start, nodes, end) {
@@ -23,7 +37,7 @@ module.exports = function (opts) {
           },
           {
             type: 'text',
-            value: 'Open ' + toString(start)
+            value: summarizer(toString(start))
           },
           {
             type: 'html',
