@@ -8,6 +8,14 @@ Tada! :tada:
 
 </details>
 
+```markdown
+<details><summary>Open example</summary>
+
+Tada! :tada:
+
+</details>
+```
+
 ## Installation
 
 ```sh
