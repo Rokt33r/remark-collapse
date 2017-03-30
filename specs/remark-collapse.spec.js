@@ -1,10 +1,10 @@
 const remark = require('remark')
 const collapse = require('..')
 
-const processor = remark()
-  .use(collapse, {test: 'tango'})
+test('tango should be collapsible', () => {
+  const processor = remark()
+    .use(collapse, {test: 'tango'})
 
-test('tango should be collapsable', () => {
   const inputString = [
     '# Heading1',
     '',
