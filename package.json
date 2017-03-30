@@ -1,6 +1,6 @@
 {
   "name": "remark-collapse",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "index.js",
   "repository": "git@github.com:Rokt33r/remark-collapse.git",
   "author": "Junyoung Choi <fluke8259@gmail.com>",
