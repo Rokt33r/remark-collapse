@@ -74,6 +74,44 @@ test('summarizer can be overridden', () => {
   expect(resultString).toEqual(expectedString)
 })
 
+test('summarizer can be overridden by a string', () => {
+  const processor = remark()
+    .use(collapse, {
+      test: 'tango',
+      summary: 'Give yourself away!'
+    })
+
+  const inputString = [
+    '# Heading1',
+    '',
+    '## tango',
+    '',
+    'target content',
+    '',
+    '## Another heading2',
+    ''
+  ].join('\n')
+
+  const resultString = processor.processSync(inputString).toString()
+
+  const expectedString = [
+    '# Heading1',
+    '',
+    '## tango',
+    '',
+    '<details><summary>Give yourself away!</summary>',
+    '',
+    'target content',
+    '',
+    '</details>',
+    '',
+    '## Another heading2',
+    ''
+  ].join('\n')
+
+  expect(resultString).toEqual(expectedString)
+})
+
 test('throw an error if options.test does not exist', () => {
   expect(() => {
     const invalidProcessor = remark()
@@ -87,7 +125,7 @@ test('throw an error if options.summary is not a function', () => {
     const invalidProcessor = remark()
       .use(collapse, {
         test: 'dummy',
-        summary: 'Definetely not a function'
+        summary: 1234 // Definetely neither a function nor a string
       })
     invalidProcessor.processSync('# dummy')
   }).toThrow()

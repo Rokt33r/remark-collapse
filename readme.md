@@ -70,7 +70,7 @@ To find heading range, Remark Collapse uses [mdast-util-heading-range].
 > `test` — Heading to look for.  When `string`, wrapped in `new RegExp('^(' + value + ')$', 'i')`;  when `RegExp`, wrapped
     in `function (value) {expression.test(value)}`.
 
-### `options.summary` (`function(string): string`)
+### `options.summary` (`function(string): string`, `string`)
 
 Summarizing function. By default, it uses text of the target heading and prepends `Open ` to it.
 
@@ -91,6 +91,9 @@ const processor = remark()
   .use(collapse, {
     test: 'tango',
     summary: defuseTimeBomb
+    /* Also, you can provide a string
+    summary: 'Tick... Tock... Tick... Tock...⏱'
+    */
   })
 
 const inputString = [

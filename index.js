@@ -5,6 +5,10 @@ function defaultSummarizer (str) {
   return 'Open ' + str
 }
 
+function isString (str) {
+  return typeof str === 'string'
+}
+
 function isFunction (fn) {
   return typeof fn === 'function'
 }
@@ -12,55 +16,51 @@ function isFunction (fn) {
 module.exports = function (opts) {
   if (opts == null || opts.test == null) throw new Error('options.test must be given')
 
-  const summarizer = opts.summary != null
-    ? opts.summary
-    : defaultSummarizer
+  const summarizer = opts.summary == null
+    ? defaultSummarizer
+    : isString(opts.summary)
+    ? () => opts.summary
+    : opts.summary
 
   if (!isFunction(summarizer)) throw new Error('options.summary must be function')
 
   return function (node) {
     heading(node, opts.test, function (start, nodes, end) {
-      let result = []
-
-      start == null || result.push(start)
-
-      result.push({
-        type: 'paragraph',
-        children: [
-          {
-            type: 'html',
-            value: '<details>'
-          },
-          {
-            type: 'html',
-            value: '<summary>'
-          },
-          {
-            type: 'text',
-            value: summarizer(toString(start))
-          },
-          {
-            type: 'html',
-            value: '</summary>'
-          }
-        ]
-      })
-
-      result = result.concat(nodes)
-
-      result.push({
-        type: 'paragraph',
-        children: [
-          {
-            type: 'html',
-            value: '</details>'
-          }
-        ]
-      })
-
-      end == null || result.push(end)
-
-      return result
+      return [
+        start,
+        {
+          type: 'paragraph',
+          children: [
+            {
+              type: 'html',
+              value: '<details>'
+            },
+            {
+              type: 'html',
+              value: '<summary>'
+            },
+            {
+              type: 'text',
+              value: summarizer(toString(start))
+            },
+            {
+              type: 'html',
+              value: '</summary>'
+            }
+          ]
+        },
+        ...nodes,
+        {
+          type: 'paragraph',
+          children: [
+            {
+              type: 'html',
+              value: '</details>'
+            }
+          ]
+        },
+        end
+      ]
     })
   }
 }
